@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 export type Lang = 'en' | 'zh';
 
@@ -16,6 +16,8 @@ interface I18nValue<T> {
 
 const I18nContext = createContext<I18nValue<unknown> | null>(null);
 
+const STORAGE_KEY = 'kiki.lang';
+
 interface ProviderProps<T extends I18nPack> {
   packs: T;
   initial?: Lang;
@@ -23,7 +25,26 @@ interface ProviderProps<T extends I18nPack> {
 }
 
 export function I18nProvider<T extends I18nPack>({ packs, initial = 'en', children }: ProviderProps<T>) {
-  const [lang, setLang] = useState<Lang>(initial);
+  const [lang, setLangState] = useState<Lang>(initial);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === 'en' || stored === 'zh') setLangState(stored);
+    } catch {
+      // localStorage unavailable (private mode, SSR mismatch)
+    }
+  }, []);
+
+  const setLang = (next: Lang) => {
+    setLangState(next);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // localStorage unavailable
+    }
+  };
+
   const t = lang === 'en' ? packs.en : packs.zh;
   return (
     <I18nContext.Provider value={{ lang, setLang, t }}>
