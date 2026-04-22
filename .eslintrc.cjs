@@ -18,7 +18,7 @@ module.exports = {
       default: 'disallow',
       rules: [
         { from: 'app',     allow: ['module', 'ui', 'lib', 'content', 'server'] },
-        { from: 'module',  allow: ['lib', 'ui', 'server', 'content'] },
+        { from: 'module',  allow: ['module', 'lib', 'ui', 'server', 'content'] },
         { from: 'server',  allow: ['lib'] },
         { from: 'ui',      allow: ['lib'] },
         { from: 'content', allow: ['lib'] },
