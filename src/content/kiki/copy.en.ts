@@ -58,6 +58,16 @@ export interface Copy {
     rights: string;
     instagramCtaLabel: string;
   };
+  pages: {
+    servicesTitle: string;
+    servicesSubtitle: string;
+    servicesBookLabel: string;
+    portfolioTitle: string;
+    portfolioSubtitle: string;
+    classesTitle: string;
+    classesBody: string;
+    durationUnitShort: string;
+  };
 }
 
 export const copyEn: Copy = {
@@ -143,5 +153,16 @@ export const copyEn: Copy = {
   footer: {
     rights: '© Kiki Studio',
     instagramCtaLabel: 'Follow us on Instagram',
+  },
+  pages: {
+    servicesTitle: 'Services',
+    servicesSubtitle: 'Full pricing across every look.',
+    servicesBookLabel: 'Book',
+    portfolioTitle: 'Portfolio',
+    portfolioSubtitle: 'A glimpse of recent work.',
+    classesTitle: 'Classes',
+    classesBody:
+      "Kiki's Korean makeup classes are launching soon. Check back in a few weeks, or follow on Instagram for announcements.",
+    durationUnitShort: 'min',
   },
 };

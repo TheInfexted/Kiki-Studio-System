@@ -84,4 +84,15 @@ export const copyZh: Copy = {
     rights: '© Kiki Studio',
     instagramCtaLabel: '关注我们的 Instagram',
   },
+  pages: {
+    servicesTitle: '服务',
+    servicesSubtitle: '完整价目,清楚明白。',
+    servicesBookLabel: '预约',
+    portfolioTitle: '作品集',
+    portfolioSubtitle: '最近的一些妆容作品。',
+    classesTitle: '课程',
+    classesBody:
+      'Kiki 的韩式彩妆课程即将推出。请过几周再回来看看,或关注 Instagram 留意最新公告。',
+    durationUnitShort: '分钟',
+  },
 };

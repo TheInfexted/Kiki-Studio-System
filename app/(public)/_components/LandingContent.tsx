@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import {
-  SiteHeader,
   Hero,
   PhotoStrip,
   ServicesSection,
@@ -24,8 +23,6 @@ export function LandingContent({ services }: LandingContentProps) {
 
   return (
     <>
-      <SiteHeader navLabels={t.nav} transparent />
-
       <Hero
         eyebrow={t.landing.heroEyebrow}
         headline={t.landing.heroHeadline}
