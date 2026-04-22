@@ -1,6 +1,6 @@
 import { prisma } from '@/server/db';
 import { computeAvailableSlots, type Slot } from './slot-search';
-import { getSetting } from '@/modules/settings';
+import { getSetting } from '@/lib/settings';
 
 export async function getAvailableSlots(params: {
   dateKl: string;

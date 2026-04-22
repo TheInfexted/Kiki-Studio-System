@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { getSetting, setSetting, type SettingSchema } from '@/modules/settings';
+import { getSetting, setSetting, type SettingSchema } from '@/lib/settings';
 
 vi.mock('@/server/db', () => {
   const store = new Map<string, unknown>();
