@@ -19,9 +19,25 @@ export default {
         },
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Georgia', 'serif'],
-        serif: ['var(--font-display)', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: [
+          'var(--font-display)',
+          '"Noto Serif SC"',
+          'Georgia',
+          'serif',
+        ],
+        serif: [
+          'var(--font-display)',
+          '"Noto Serif SC"',
+          'Georgia',
+          'serif',
+        ],
+        sans: [
+          'var(--font-sans)',
+          '"Noto Sans SC"',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+        ],
       },
       maxWidth: {
         content: '1120px',
