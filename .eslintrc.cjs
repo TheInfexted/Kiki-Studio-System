@@ -28,7 +28,11 @@ module.exports = {
     'boundaries/entry-point': ['error', {
       default: 'disallow',
       rules: [
-        { target: ['module'], allow: 'index.(ts|tsx)' },
+        { target: ['module'],  allow: 'index.(ts|tsx)' },
+        { target: ['ui'],      allow: 'index.(ts|tsx)' },
+        { target: ['content'], allow: 'index.(ts|tsx)' },
+        { target: ['lib'],     allow: '*.tsx?' },
+        { target: ['server'],  allow: '*.tsx?' },
       ],
     }],
   },

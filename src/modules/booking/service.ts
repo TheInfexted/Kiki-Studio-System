@@ -39,14 +39,14 @@ export async function createBooking(input: CreateBookingInput): Promise<Booking>
 
   return prisma.$transaction(async (tx) => {
     // Lock any overlapping booking rows to serialize conflicting writers.
-    const conflicts = await (tx.$queryRaw as any)<Array<{ id: string }>>(Prisma.sql`
+    const conflicts = await tx.$queryRaw(Prisma.sql`
       SELECT id FROM \`Booking\`
       WHERE deletedAt IS NULL
         AND status IN ('pending','confirmed')
         AND scheduledAt < ${slotEnd}
         AND DATE_ADD(scheduledAt, INTERVAL durationMin MINUTE) > ${slotStart}
       FOR UPDATE
-    `);
+    `) as Array<{ id: string }>;
     if (conflicts.length > 0) {
       throw new SlotTakenError();
     }
