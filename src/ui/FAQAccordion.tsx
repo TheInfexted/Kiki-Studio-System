@@ -16,43 +16,63 @@ export interface FAQAccordionProps {
 }
 
 export function FAQAccordion({ eyebrow, title, items }: FAQAccordionProps) {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
 
   return (
-    <section id="faq" className="bg-cream py-16 px-6">
+    <section id="faq" className="bg-cream py-24 px-6">
       <div className="max-w-content mx-auto">
-        <p className="eyebrow mb-3">{eyebrow}</p>
-        <h2 className="headline text-4xl md:text-5xl mb-10">{title}</h2>
-        <div className="border-t border-tan/50">
-          {items.map((f) => {
-            const open = openId === f.id;
-            return (
-              <div key={f.id} className="border-b border-tan/50">
-                <button
-                  type="button"
-                  onClick={() => setOpenId(open ? null : f.id)}
-                  aria-expanded={open}
-                  className="w-full flex items-center justify-between py-4 text-left gap-4"
-                >
-                  <span className="font-sans text-base font-medium text-espresso">
-                    {f.question}
-                  </span>
-                  <ChevronDown
-                    size={18}
-                    className={`shrink-0 text-caramel transition-transform ${open ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                <div
-                  className={`overflow-hidden transition-all ${open ? 'max-h-96 pb-4' : 'max-h-0'}`}
-                  style={{ visibility: open ? 'visible' : 'hidden' }}
-                >
-                  <p className="font-sans text-sm text-warmbrown leading-relaxed">
-                    {f.answer}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid md:grid-cols-5 gap-10 md:gap-16">
+          <div className="md:col-span-2">
+            <p className="eyebrow mb-4">{eyebrow}</p>
+            <h2 className="headline text-4xl md:text-5xl mb-4">{title}</h2>
+            <p className="font-sans text-sm text-warmbrown leading-relaxed max-w-sm">
+              Still unsure? Message me on WhatsApp — quickest way to ask anything.
+            </p>
+          </div>
+          <div className="md:col-span-3">
+            <div className="divide-y divide-tan/40 border-y border-tan/40">
+              {items.map((f) => {
+                const open = openId === f.id;
+                return (
+                  <div key={f.id}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenId(open ? null : f.id)}
+                      aria-expanded={open}
+                      className="w-full flex items-center justify-between py-5 text-left gap-6 group"
+                    >
+                      <span className="font-serif text-lg md:text-xl text-espresso group-hover:text-warmbrown transition-colors">
+                        {f.question}
+                      </span>
+                      <span
+                        className={`shrink-0 h-8 w-8 rounded-full border border-tan/60 flex items-center justify-center transition-all ${
+                          open ? 'bg-espresso border-espresso' : 'bg-transparent'
+                        }`}
+                      >
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform ${
+                            open ? 'rotate-180 text-cream' : 'text-espresso'
+                          }`}
+                        />
+                      </span>
+                    </button>
+                    <div
+                      className={`grid transition-all duration-300 ${
+                        open ? 'grid-rows-[1fr] pb-6' : 'grid-rows-[0fr]'
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="font-sans text-sm md:text-base text-warmbrown leading-relaxed max-w-prose">
+                          {f.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

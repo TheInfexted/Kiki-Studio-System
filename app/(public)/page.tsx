@@ -3,6 +3,7 @@ import { listActiveServices } from '@/modules/service';
 import { copyEn, brand } from '@/content/kiki';
 import { HeroClient } from './_components/HeroClient';
 import { ServicesSectionClient } from './_components/ServicesSectionClient';
+import { SiteHeaderClient } from './_components/SiteHeaderClient';
 
 export default async function HomePage() {
   const services = await listActiveServices();
@@ -10,6 +11,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <SiteHeaderClient navLabels={t.nav} transparent />
+
       <HeroClient
         eyebrow={t.landing.heroEyebrow}
         headline={t.landing.heroHeadline}
@@ -49,7 +52,7 @@ export default async function HomePage() {
       <Footer
         copyright={t.footer.rights}
         instagramUrl={brand.instagram}
-        instagramHandle='@kiki.makeup___'
+        instagramHandle="@kiki.makeup___"
         instagramCtaLabel={t.footer.instagramCtaLabel}
       />
     </>

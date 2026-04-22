@@ -9,4 +9,5 @@ export { FAQAccordion, type FAQAccordionProps, type FAQItem } from './FAQAccordi
 export { ServicesSection, type ServicesSectionProps, type ServicesSectionCopy, type ServiceDisplay } from './ServicesSection';
 export { LocationSection, type LocationSectionProps } from './LocationSection';
 export { LanguageToggle, type LanguageToggleProps } from './LanguageToggle';
+export { SiteHeader, type SiteHeaderProps } from './SiteHeader';
 export { PortfolioSection, type PortfolioSectionProps, type PortfolioSectionCopy, type StyleCardData } from './PortfolioSection';

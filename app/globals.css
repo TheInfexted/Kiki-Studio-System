@@ -2,5 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
-body { @apply bg-white text-neutral-900 antialiased; }
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-espresso antialiased font-sans;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-eyebrow text-caramel;
+  }
+  .headline {
+    @apply font-serif font-normal tracking-tight leading-[1.05] text-espresso;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] bg-espresso text-cream rounded-full transition-all hover:bg-warmbrown hover:-translate-y-0.5 active:translate-y-0 shadow-sm hover:shadow-md;
+  }
+  .btn-primary-inverse {
+    @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] bg-cream text-espresso rounded-full transition-all hover:bg-white hover:-translate-y-0.5 active:translate-y-0 shadow-md;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] border border-current rounded-full transition-colors hover:bg-current/10;
+  }
+  .link-underline {
+    @apply font-sans text-sm font-semibold uppercase tracking-wider underline decoration-1 underline-offset-[6px] hover:decoration-2;
+  }
+}
