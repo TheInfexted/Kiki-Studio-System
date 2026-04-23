@@ -147,7 +147,7 @@ model Booking {
   paymentReference       String?
   confirmedAt            DateTime?
   confirmedByUserId      String?
-  rejectionReason        String?
+  rejectionReason        String?             @db.Text
   deletedAt              DateTime?
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
