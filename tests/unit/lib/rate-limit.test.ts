@@ -1,10 +1,14 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createRateLimiter } from '@/lib/rate-limit';
 
 describe('createRateLimiter', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-04-23T00:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('allows up to `max` requests per key within the window', () => {
@@ -28,6 +32,13 @@ describe('createRateLimiter', () => {
     expect(limiter.check('ip-1').ok).toBe(true);
     expect(limiter.check('ip-1').ok).toBe(false);
     vi.advanceTimersByTime(60_001);
+    expect(limiter.check('ip-1').ok).toBe(true);
+  });
+
+  it('allows a request at exactly the window boundary', () => {
+    const limiter = createRateLimiter({ max: 1, windowMs: 60_000 });
+    limiter.check('ip-1');
+    vi.advanceTimersByTime(60_000);
     expect(limiter.check('ip-1').ok).toBe(true);
   });
 
