@@ -8,10 +8,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/unit/**/*.test.{ts,tsx}'],
+    server: {
+      deps: {
+        inline: ['next-auth', '@auth/core'],
+      },
+    },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'next/server': path.resolve(__dirname, './node_modules/next/server.js'),
     },
   },
 });
