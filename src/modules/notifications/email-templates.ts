@@ -97,3 +97,78 @@ export function renderCustomerConfirmationEmail(ctx: BookingEmailContext): { sub
   ].join('\n');
   return { subject, html, text };
 }
+
+export function renderBookingConfirmedEmail(ctx: BookingEmailContext): { subject: string; html: string; text: string } {
+  const isZh = ctx.lang === 'zh';
+  const subject = isZh
+    ? `您的预约已确认 · ${ctx.serviceName}`
+    : `Your booking with Kiki is confirmed · ${ctx.serviceName}`;
+  const greeting = isZh ? `您好 ${ctx.customerName}` : `Hi ${ctx.customerName}`;
+  const body = isZh
+    ? '您的预约已确认。以下是详细信息。如需更改,请直接联系 Kiki。'
+    : 'Your booking is confirmed. Details below. If you need to change anything, reach out to Kiki directly.';
+  const detailsHeader = isZh ? '预约详情' : 'Booking details';
+  const price = formatMYR(ctx.priceMyrCents);
+  const html = `
+  <div style="font-family:system-ui,sans-serif;max-width:560px;margin:auto;">
+    <h2 style="color:#8a4a36;">${greeting}</h2>
+    <p>${body}</p>
+    <h3 style="margin-top:24px;">${detailsHeader}</h3>
+    <table style="width:100%;border-collapse:collapse;background:#fdf7f4;">
+      ${row(isZh ? '服务' : 'Service', ctx.serviceName)}
+      ${row(isZh ? '时间(KL)' : 'When (KL)', ctx.scheduledAtKl)}
+      ${row(isZh ? '时长' : 'Duration', `${ctx.durationMin} min`)}
+      ${row(isZh ? '地点' : 'Location', ctx.locationSummary)}
+      ${row(isZh ? '价格' : 'Price', price)}
+    </table>
+  </div>`;
+  const text = [
+    greeting,
+    '',
+    body,
+    '',
+    `${detailsHeader}:`,
+    `- ${isZh ? '服务' : 'Service'}: ${ctx.serviceName}`,
+    `- ${isZh ? '时间(KL)' : 'When (KL)'}: ${ctx.scheduledAtKl}`,
+    `- ${isZh ? '时长' : 'Duration'}: ${ctx.durationMin} min`,
+    `- ${isZh ? '地点' : 'Location'}: ${ctx.locationSummary}`,
+    `- ${isZh ? '价格' : 'Price'}: ${price}`,
+  ].join('\n');
+  return { subject, html, text };
+}
+
+export function renderBookingRejectedEmail(
+  ctx: BookingEmailContext,
+  reason: string | null,
+): { subject: string; html: string; text: string } {
+  const isZh = ctx.lang === 'zh';
+  const subject = isZh
+    ? `关于您的预约请求 · ${ctx.serviceName}`
+    : `Update on your booking request · ${ctx.serviceName}`;
+  const greeting = isZh ? `您好 ${ctx.customerName}` : `Hi ${ctx.customerName}`;
+  const apology = isZh
+    ? '很抱歉,Kiki 无法接受您的预约请求。您可以尝试选择其他时间重新预约。'
+    : 'Unfortunately Kiki is unable to take this booking. You are welcome to try another date or time.';
+  const reasonHeader = isZh ? 'Kiki 的留言:' : 'Kiki shared this note:';
+  const safeReason = reason ? reason.replace(/</g, '&lt;').replace(/>/g, '&gt;') : null;
+  const reasonBlock = safeReason
+    ? `<p style="margin-top:12px;padding:12px;background:#fdf7f4;border-left:3px solid #8a4a36;">${reasonHeader}<br/>${safeReason}</p>`
+    : '';
+  const html = `
+  <div style="font-family:system-ui,sans-serif;max-width:560px;margin:auto;">
+    <h2 style="color:#8a4a36;">${greeting}</h2>
+    <p>${apology}</p>
+    ${reasonBlock}
+    <p style="margin-top:24px;"><a href="${ctx.siteUrl}/book" style="color:#8a4a36;">${isZh ? '重新预约' : 'Book another date'}</a></p>
+  </div>`;
+  const textParts = [
+    greeting,
+    '',
+    apology,
+  ];
+  if (reason) {
+    textParts.push('', reasonHeader, reason);
+  }
+  textParts.push('', `${ctx.siteUrl}/book`);
+  return { subject, html, text: textParts.join('\n') };
+}
