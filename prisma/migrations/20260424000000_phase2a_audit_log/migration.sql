@@ -21,7 +21,10 @@ ALTER TABLE `AuditLog` ADD CONSTRAINT `AuditLog_bookingId_fkey` FOREIGN KEY (`bo
 -- AddForeignKey
 ALTER TABLE `AuditLog` ADD CONSTRAINT `AuditLog_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
--- Backfill booking_created audit events for existing Phase 1 bookings
+-- Backfill booking_created audit events for existing Phase 1 bookings.
+-- toStatus is hardcoded to 'pending' because that is the creation-time
+-- status for every booking (Booking.status @default(pending)). Subsequent
+-- transitions (confirmed/rejected/etc) have their own AuditLog rows.
 INSERT INTO `AuditLog` (`id`, `bookingId`, `action`, `toStatus`, `createdAt`)
 SELECT
   CONCAT('bkfl_', b.id),
