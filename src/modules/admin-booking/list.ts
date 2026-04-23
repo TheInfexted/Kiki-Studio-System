@@ -89,3 +89,28 @@ function orderForTab(tab: AdminTab): Prisma.BookingOrderByWithRelationInput[] {
   if (tab === 'past') return [{ scheduledAt: 'desc' }];
   return [{ scheduledAt: 'asc' }];
 }
+
+export type FailedNotifyEntry = {
+  bookingId: string;
+  clientName: string;
+};
+
+export async function listBookingsWithTrailingNotifyFailure(): Promise<FailedNotifyEntry[]> {
+  const rows = await prisma.$queryRaw<Array<{ bookingId: string; clientName: string }>>(Prisma.sql`
+    SELECT b.id AS bookingId, c.name AS clientName
+    FROM Booking b
+    JOIN Client c ON c.id = b.clientId
+    JOIN (
+      SELECT bookingId, action,
+             ROW_NUMBER() OVER (PARTITION BY bookingId ORDER BY createdAt DESC) AS rn
+      FROM AuditLog
+      WHERE action IN ('notify_sent', 'notify_failed')
+    ) latest ON latest.bookingId = b.id AND latest.rn = 1
+    WHERE latest.action = 'notify_failed'
+      AND b.deletedAt IS NULL
+      AND b.status IN ('confirmed','rejected')
+    ORDER BY b.updatedAt DESC
+    LIMIT 10
+  `);
+  return rows;
+}

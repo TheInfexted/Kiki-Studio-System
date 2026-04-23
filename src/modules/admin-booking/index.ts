@@ -9,8 +9,10 @@ export {
 export { getRevenueSummary, type RevenueSummary } from './revenue';
 export {
   listBookingsForAdmin,
+  listBookingsWithTrailingNotifyFailure,
   type AdminTab,
   type BookingListInput,
   type BookingListItem,
   type BookingListResult,
+  type FailedNotifyEntry,
 } from './list';
