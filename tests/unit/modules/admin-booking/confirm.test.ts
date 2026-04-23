@@ -73,7 +73,7 @@ describe('confirmBooking', () => {
     const result = await confirmBooking(bookingId, null);
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected already_handled');
-    expect(result.reason).toBe('already_handled');
+    if (result.reason !== 'already_handled') throw new Error(`expected already_handled, got ${result.reason}`);
     expect(result.status).toBe('rejected');
 
     const audits = await prisma.auditLog.findMany({

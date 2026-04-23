@@ -92,7 +92,7 @@ describe('rejectBooking', () => {
     const result = await rejectBooking(bookingId, 'late', null);
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected already_handled');
-    expect(result.reason).toBe('already_handled');
+    if (result.reason !== 'already_handled') throw new Error(`expected already_handled, got ${result.reason}`);
     expect(result.status).toBe('confirmed');
   });
 });
