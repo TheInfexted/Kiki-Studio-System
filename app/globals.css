@@ -29,7 +29,7 @@
     @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] bg-cream text-espresso rounded-full transition-all hover:bg-white hover:-translate-y-0.5 active:translate-y-0 shadow-md;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] border border-current rounded-full transition-colors hover:bg-current/10;
+    @apply inline-flex items-center justify-center font-sans text-sm font-semibold uppercase tracking-wider px-6 py-3 min-h-[48px] border border-current rounded-full transition-colors hover:bg-warmbrown/10;
   }
   .link-underline {
     @apply font-sans text-sm font-semibold uppercase tracking-wider underline decoration-1 underline-offset-[6px] hover:decoration-2;

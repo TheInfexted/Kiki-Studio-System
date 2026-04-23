@@ -5,6 +5,7 @@ import { getServiceBySlug } from '@/modules/service';
 import { sendBookingCreatedNotifications } from '@/modules/notifications';
 import { formatKl } from '@/lib/date';
 import { verifyTurnstile } from '@/lib/turnstile';
+import { signBookingAction } from '@/lib/signed-url';
 import { brand } from '@/content/kiki';
 
 const Body = z.object({
@@ -79,6 +80,18 @@ export async function POST(req: Request) {
     const adminTo = process.env.ADMIN_NOTIFY_EMAIL;
     if (adminTo) {
       try {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+        let adminActions: { confirmUrl: string; rejectUrl: string } | undefined;
+        try {
+          const confirmToken = signBookingAction(booking.id, 'confirm');
+          const rejectToken = signBookingAction(booking.id, 'reject');
+          adminActions = {
+            confirmUrl: `${siteUrl}/b/${confirmToken}`,
+            rejectUrl: `${siteUrl}/b/${rejectToken}`,
+          };
+        } catch (e) {
+          console.error('Failed to sign booking action tokens', e);
+        }
         await sendBookingCreatedNotifications({
           adminEmails: adminTo
             .split(',')
@@ -100,9 +113,10 @@ export async function POST(req: Request) {
                 ? `Studio · ${brand.address.line1}`
                 : parsed.data.locationAddress ?? parsed.data.locationType,
             customerNotes: parsed.data.customerNotes,
-            siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? '',
+            siteUrl,
             lang: parsed.data.customer.languagePref,
           },
+          adminActions,
         });
       } catch (e) {
         console.error('Notification send failed', e);

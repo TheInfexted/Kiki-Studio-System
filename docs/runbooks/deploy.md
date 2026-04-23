@@ -62,3 +62,43 @@ For DB migration rollback: restore from CloudPanel nightly backup into a scratch
 - Replace placeholder `AvailabilityRule` rows with Kiki's real hours
 - Replace placeholder `travel_buffer_minutes` / `min_booking_lead_hours` with her preferences
 - Replace any placeholder service descriptions with Kiki's wording (bilingual)
+
+---
+
+## Phase 2a — Admin Dashboard
+
+### New environment variables
+
+- `AUTH_SECRET` — 32+ random bytes (`openssl rand -base64 32`). Required. Rotating primarily invalidates in-flight verification tokens; database sessions persist. To force all sessions to end: `TRUNCATE TABLE Session;`
+- `AUTH_URL` — optional; Auth.js v5 auto-detects in most deploys. Set to the public origin if behind a proxy with unusual `Host` rewrites.
+- `ADMIN_EMAILS` — comma-separated list of emails allowed to sign in to `/admin`. Case-insensitive, whitespace-trimmed. Adding an admin: edit this var and redeploy.
+- `ACTION_TOKEN_SECRET` — 32+ random bytes, distinct from `AUTH_SECRET`. Rotating invalidates outstanding confirm/reject email links; pending bookings need manual re-send.
+- `EMAIL_TRANSPORT` — optional, default `resend`. Set to `file` only in local dev / CI.
+
+Phase 1's `NEXTAUTH_SECRET` / `NEXTAUTH_URL` are superseded by `AUTH_SECRET` / `AUTH_URL`.
+
+### Admin operations without a UI (2a omissions)
+
+- **Block a date range.**
+  ```sql
+  INSERT INTO AvailabilityBlock (id, startAt, endAt, reason, createdAt)
+  VALUES (CONCAT('blk_', FLOOR(RAND()*1e9)), '2026-05-01 00:00:00', '2026-05-05 00:00:00', 'Vacation', NOW());
+  ```
+- **Disable a service.**
+  ```sql
+  UPDATE Service SET active = FALSE, updatedAt = NOW() WHERE slug = 'party-makeup';
+  ```
+- **Add a new admin email.** Edit `ADMIN_EMAILS` env var → redeploy.
+- **Force all sessions to expire.** `TRUNCATE TABLE Session;` then rotate `AUTH_SECRET`.
+
+### Phase 1 → 2a upgrade
+
+1. Run migrations in order: first `20260424000000_phase2a_audit_log`, then `20260425000000_phase2a_drop_user_role`. Prisma handles both via `prisma migrate deploy`.
+2. Regenerate the Prisma client: `pnpm exec prisma generate`.
+3. Redeploy the app.
+4. Verify the audit backfill: `SELECT COUNT(*) FROM AuditLog WHERE action = 'booking_created';` matches the `Booking` count.
+
+### Token and secret rotation
+
+- `AUTH_SECRET` — in-flight verification tokens become invalid. Sessions persist unless you truncate `Session`.
+- `ACTION_TOKEN_SECRET` — all outstanding confirm/reject links in Kiki's inbox become invalid. If a booking has a pending email with a stale link, either re-send via the admin dashboard resend flow or ask Kiki to act via the dashboard directly.

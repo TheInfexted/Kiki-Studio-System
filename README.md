@@ -1,10 +1,10 @@
 # Kiki Studio System
 
-Operating system for a solo Korean-style makeup studio — bilingual public site, smart booking wizard, admin dashboard, media library, class enrollment.
+Operating system for a solo Korean-style makeup studio — bilingual public site, smart booking wizard, admin dashboard with signed-link confirm/reject + audit log, media library, class enrollment.
 
 ## Tech
 
-Next.js 14 · TypeScript · Tailwind 3 · Prisma + MySQL · NextAuth (Phase 2) · Resend · Cloudflare R2 (Phase 3) · Meta WhatsApp Cloud API (Phase 2).
+Next.js 14 · TypeScript · Tailwind 3 · Prisma + MySQL · NextAuth v5 · Resend · Cloudflare R2 (Phase 3) · Meta WhatsApp Cloud API (Phase 2b).
 
 ## Get running locally
 
@@ -25,6 +25,10 @@ pnpm dev                       # http://localhost:3000
 - `pnpm test:e2e` — Playwright end-to-end tests (boots dev server)
 - `pnpm db:studio` — Prisma Studio
 - `pnpm check:env` — verify required env vars are set
+
+## Deployment
+
+See [docs/runbooks/deploy.md](docs/runbooks/deploy.md) for VPS setup and the Phase 2a admin-dashboard upgrade procedure.
 
 ## Layout
 

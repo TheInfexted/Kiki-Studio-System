@@ -23,15 +23,18 @@ jobs:
           --health-retries=10
     env:
       DATABASE_URL: mysql://kiki:kiki_dev@localhost:3306/kiki_studio
-      RESEND_API_KEY: test
-      EMAIL_FROM: test@example.com
+      RESEND_API_KEY: re_test_placeholder
+      EMAIL_FROM: "Kiki CI <ci@test.local>"
+      EMAIL_TRANSPORT: file
       TURNSTILE_SITE_KEY: 1x00000000000000000000AA
       TURNSTILE_SECRET_KEY: 1x0000000000000000000000000000000AA
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
-      ADMIN_NOTIFY_EMAIL: admin@example.com
-      AUTH_SECRET: ci-secret
+      ADMIN_NOTIFY_EMAIL: ci-admin@test.local
+      ADMIN_EMAILS: ci-admin@test.local,e2e-admin@test.local
+      AUTH_SECRET: ci-secret-32-bytes-minimum-abcdefgh
       AUTH_URL: http://localhost:3000
+      ACTION_TOKEN_SECRET: ci-action-secret-32-bytes-abcdefghi
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

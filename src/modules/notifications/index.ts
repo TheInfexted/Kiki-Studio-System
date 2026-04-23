@@ -4,4 +4,9 @@ export {
   type BookingEmailContext,
   type Lang,
 } from './email-templates';
-export { sendBookingCreatedNotifications } from './service';
+export {
+  sendBookingCreatedNotifications,
+  sendMagicLinkEmail,
+  sendBookingConfirmedEmail,
+  sendBookingRejectedEmail,
+} from './service';
