@@ -68,6 +68,100 @@ export interface Copy {
     classesBody: string;
     durationUnitShort: string;
   };
+  admin: {
+    signIn: {
+      title: string;
+      emailLabel: string;
+      submit: string;
+      submitting: string;
+      checkEmailTitle: string;
+      checkEmailBody: string;
+      errors: {
+        generic: string;
+        expired: string;
+      };
+    };
+    header: {
+      brand: string;
+      signedInAs: string;
+      signOut: string;
+    };
+    revenue: {
+      thisMonth: string;
+      confirmed: string;
+      pending: string;
+      upcoming: string;
+    };
+    tabs: {
+      pending: string;
+      upcoming: string;
+      past: string;
+    };
+    search: {
+      placeholder: string;
+      submit: string;
+      noResults: string;
+    };
+    pagination: {
+      previous: string;
+      next: string;
+      pageOf: string;
+    };
+    booking: {
+      durationUnit: string;
+      statusLabels: {
+        pending: string;
+        confirmed: string;
+        rejected: string;
+        completed: string;
+        cancelled: string;
+        no_show: string;
+      };
+      locationLabels: {
+        studio: string;
+        home: string;
+        venue: string;
+      };
+      customerNoteHeader: string;
+      adminNoteHeader: string;
+      auditTrailHeader: string;
+      confirmAction: string;
+      rejectAction: string;
+      confirming: string;
+      rejecting: string;
+      rejectReasonLabel: string;
+      rejectReasonPlaceholder: string;
+      rejectSubmit: string;
+      rejectCancel: string;
+      notifyFailedBanner: string;
+      resendAction: string;
+      alreadyHandled: string;
+    };
+    actions: {
+      confirmHeading: string;
+      confirmBody: string;
+      confirmButton: string;
+      confirmedHeading: string;
+      confirmedBodyWithNotifyOk: string;
+      confirmedBodyWithNotifyFail: string;
+      rejectHeading: string;
+      rejectBody: string;
+      rejectButton: string;
+      rejectedHeading: string;
+      invalidLink: string;
+      expiredLink: string;
+      notFound: string;
+    };
+    audit: {
+      events: {
+        booking_created: string;
+        booking_confirmed: string;
+        booking_rejected: string;
+        notify_sent: string;
+        notify_failed: string;
+      };
+    };
+  };
 }
 
 export const copyEn: Copy = {
@@ -164,5 +258,99 @@ export const copyEn: Copy = {
     classesBody:
       "Kiki's Korean makeup classes are launching soon. Check back in a few weeks, or follow on Instagram for announcements.",
     durationUnitShort: 'min',
+  },
+  admin: {
+    signIn: {
+      title: 'Admin sign in',
+      emailLabel: 'Email',
+      submit: 'Send sign-in link',
+      submitting: 'Sending…',
+      checkEmailTitle: 'Check your email',
+      checkEmailBody: 'If that email is on the allow-list, a sign-in link was sent. It expires in 15 minutes.',
+      errors: {
+        generic: 'Something went wrong. Try again.',
+        expired: 'That link has expired. Request a new one.',
+      },
+    },
+    header: {
+      brand: 'Kiki Studio Admin',
+      signedInAs: 'Signed in as',
+      signOut: 'Sign out',
+    },
+    revenue: {
+      thisMonth: 'This month',
+      confirmed: 'confirmed',
+      pending: 'pending',
+      upcoming: 'upcoming',
+    },
+    tabs: {
+      pending: 'Pending',
+      upcoming: 'Upcoming',
+      past: 'Past',
+    },
+    search: {
+      placeholder: 'Search by name, phone, or service…',
+      submit: 'Search',
+      noResults: 'No bookings match your search.',
+    },
+    pagination: {
+      previous: 'Previous',
+      next: 'Next',
+      pageOf: 'Page {current} of {total}',
+    },
+    booking: {
+      durationUnit: 'min',
+      statusLabels: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        rejected: 'Rejected',
+        completed: 'Completed',
+        cancelled: 'Cancelled',
+        no_show: 'No-show',
+      },
+      locationLabels: {
+        studio: 'Studio',
+        home: 'Home',
+        venue: 'Venue',
+      },
+      customerNoteHeader: 'Customer note',
+      adminNoteHeader: 'Admin note',
+      auditTrailHeader: 'Audit trail',
+      confirmAction: 'Confirm',
+      rejectAction: 'Reject',
+      confirming: 'Confirming…',
+      rejecting: 'Rejecting…',
+      rejectReasonLabel: 'Reason (optional — shared with the customer)',
+      rejectReasonPlaceholder: 'Fully booked that weekend…',
+      rejectSubmit: 'Confirm rejection',
+      rejectCancel: 'Cancel',
+      notifyFailedBanner: 'Customer notification failed for {name}.',
+      resendAction: 'Resend',
+      alreadyHandled: 'This booking has already been handled.',
+    },
+    actions: {
+      confirmHeading: 'Confirm this booking?',
+      confirmBody: 'Tapping the button below will mark the booking as confirmed and email the customer.',
+      confirmButton: 'Confirm booking',
+      confirmedHeading: 'Booking confirmed',
+      confirmedBodyWithNotifyOk: 'The customer has been notified.',
+      confirmedBodyWithNotifyFail: 'Confirmed, but we could not send the customer notification email. Sign in to the dashboard to retry.',
+      rejectHeading: 'Reject this booking?',
+      rejectBody: 'Optionally share a short reason with the customer, then tap the button below.',
+      rejectButton: 'Confirm rejection',
+      rejectedHeading: 'Booking rejected',
+      invalidLink: 'This link is invalid or has been tampered with.',
+      expiredLink: 'This link has expired. Sign in to the dashboard to act on this booking.',
+      notFound: 'We could not find that booking.',
+    },
+    audit: {
+      events: {
+        booking_created: 'Booking created',
+        booking_confirmed: 'Confirmed',
+        booking_rejected: 'Rejected',
+        notify_sent: 'Customer notified',
+        notify_failed: 'Customer notification failed',
+      },
+    },
   },
 };
