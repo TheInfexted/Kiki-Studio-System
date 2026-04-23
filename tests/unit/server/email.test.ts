@@ -28,6 +28,7 @@ describe('sendEmail in file transport mode', () => {
     expect(result.id).toMatch(/^file_/);
     const entries = await readdir(MAILBOX);
     expect(entries.length).toBe(1);
+    expect(entries[0]).toMatch(/^file_\d+_[a-z0-9]{6}-/);
     const raw = await readFile(join(MAILBOX, entries[0]!), 'utf8');
     const parsed = JSON.parse(raw);
     expect(parsed).toMatchObject({

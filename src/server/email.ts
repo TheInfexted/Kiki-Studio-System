@@ -44,6 +44,7 @@ function writeToMailbox(envelope: SendEmailInput & { from: string }): { id: stri
   mkdirSync(mailbox, { recursive: true });
   const id = `file_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const recipient = Array.isArray(envelope.to) ? envelope.to[0] : envelope.to;
+  if (!recipient) throw new Error('sendEmail: `to` must have at least one recipient');
   const safeRecipient = recipient.replace(/[^a-zA-Z0-9@.-]/g, '_');
   const path = join(mailbox, `${id}-${safeRecipient}.json`);
   writeFileSync(path, JSON.stringify(envelope, null, 2));
