@@ -44,6 +44,7 @@ test('sign out returns to home', async ({ page }) => {
   if (/\/admin\/signin/.test(page.url())) {
     await page.getByLabel(/email/i).fill(ALLOWLISTED);
     await page.getByRole('button', { name: /send sign-in link/i }).click();
+    await expect(page).toHaveURL(/sent=1/);
     const entries = await readdir(MAILBOX);
     const mine = entries.find((e) => e.includes(ALLOWLISTED.replace(/[^a-zA-Z0-9@.-]/g, '_')));
     const raw = await readFile(join(MAILBOX, mine!), 'utf8');
