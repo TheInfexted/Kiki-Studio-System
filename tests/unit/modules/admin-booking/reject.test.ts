@@ -66,11 +66,33 @@ describe('rejectBooking', () => {
     expect(result.booking.rejectionReason!.length).toBe(2000);
   });
 
+  it('preserves an exactly-2000-char reason and trims a 2001-char one', async () => {
+    const exact = 'a'.repeat(2000);
+    const r1 = await rejectBooking(bookingId, exact, null);
+    expect(r1.ok).toBe(true);
+    if (!r1.ok) throw new Error('expected ok');
+    expect(r1.booking.rejectionReason).toBe(exact);
+
+    // Reset for second pass in same beforeEach row
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'pending', rejectionReason: null },
+    });
+    await prisma.auditLog.deleteMany({ where: { bookingId } });
+
+    const overByOne = 'b'.repeat(2001);
+    const r2 = await rejectBooking(bookingId, overByOne, null);
+    expect(r2.ok).toBe(true);
+    if (!r2.ok) throw new Error('expected ok');
+    expect(r2.booking.rejectionReason).toBe('b'.repeat(2000));
+  });
+
   it('returns already_handled if status != pending', async () => {
     await prisma.booking.update({ where: { id: bookingId }, data: { status: 'confirmed' } });
     const result = await rejectBooking(bookingId, 'late', null);
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected already_handled');
     expect(result.reason).toBe('already_handled');
+    expect(result.status).toBe('confirmed');
   });
 });
