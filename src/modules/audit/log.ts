@@ -8,7 +8,7 @@ export type AuditLogEntry = {
   fromStatus?: BookingStatus | null;
   toStatus?: BookingStatus | null;
   reason?: string | null;
-  meta?: Prisma.InputJsonValue;
+  meta?: Prisma.InputJsonValue | null;
 };
 
 export async function appendAuditLog(

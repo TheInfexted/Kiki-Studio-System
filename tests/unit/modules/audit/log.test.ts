@@ -33,6 +33,7 @@ describe('appendAuditLog', () => {
   });
 
   afterEach(async () => {
+    if (!bookingId) return;
     await prisma.auditLog.deleteMany({ where: { bookingId } });
     await prisma.booking.delete({ where: { id: bookingId } });
   });
