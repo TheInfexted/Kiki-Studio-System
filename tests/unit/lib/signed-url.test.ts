@@ -65,4 +65,16 @@ describe('signed-url', () => {
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.reason).toBe('expired');
   });
+
+  it('returns malformed for a payload that decodes to JSON null', () => {
+    // Construct a token whose payload is valid base64url of "null" with a matching HMAC.
+    // This bypasses the signature check but would crash on `payload.b` without the null guard.
+    const { createHmac } = require('node:crypto') as typeof import('node:crypto');
+    const nullPayloadB64 = Buffer.from('null').toString('base64url');
+    const hmac = createHmac('sha256', process.env.ACTION_TOKEN_SECRET!)
+      .update(nullPayloadB64)
+      .digest('base64url');
+    const token = `${nullPayloadB64}.${hmac}`;
+    expect(verifyBookingAction(token)).toEqual({ ok: false, reason: 'malformed' });
+  });
 });

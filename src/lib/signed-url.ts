@@ -67,7 +67,13 @@ export function verifyBookingAction(token: string): VerifyResult {
   } catch {
     return { ok: false, reason: 'malformed' };
   }
-  if (typeof payload.b !== 'string' || (payload.a !== 'confirm' && payload.a !== 'reject') || typeof payload.e !== 'number') {
+  if (
+    payload === null ||
+    typeof payload !== 'object' ||
+    typeof payload.b !== 'string' ||
+    (payload.a !== 'confirm' && payload.a !== 'reject') ||
+    typeof payload.e !== 'number'
+  ) {
     return { ok: false, reason: 'malformed' };
   }
   if (Date.now() >= payload.e) {
