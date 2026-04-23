@@ -11,3 +11,4 @@ test-results/
 prisma/migrations/dev.db*
 .DS_Store
 docs/superpowers/
+tests/.mailbox/
