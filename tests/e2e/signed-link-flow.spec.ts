@@ -13,7 +13,7 @@ test.beforeEach(async () => {
 
 test('signed-link confirm flow transitions booking status and emails customer', async ({ page }) => {
   const booking = await seedPendingBooking('201');
-  const { signBookingAction } = await import('@/lib/signed-url');
+  const { signBookingAction } = await import('../../src/lib/signed-url');
   const token = signBookingAction(booking.id, 'confirm');
 
   await page.goto(`/b/${token}`);
