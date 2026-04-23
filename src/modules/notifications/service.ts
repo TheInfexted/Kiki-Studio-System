@@ -12,8 +12,9 @@ export async function sendBookingCreatedNotifications(params: {
   adminEmails: string[];
   customerEmail?: string;
   context: BookingEmailContext;
+  adminActions?: { confirmUrl: string; rejectUrl: string };
 }): Promise<{ adminResult: { id: string }; customerResult: { id: string } | null }> {
-  const admin = renderNewBookingAdminEmail(params.context);
+  const admin = renderNewBookingAdminEmail(params.context, params.adminActions);
   const adminResult = await sendEmail({
     to: params.adminEmails,
     subject: admin.subject,

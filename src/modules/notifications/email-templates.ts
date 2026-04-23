@@ -21,9 +21,20 @@ function row(label: string, value: string): string {
   return `<tr><td style="padding:6px 12px;color:#6b6b6b;">${label}</td><td style="padding:6px 12px;font-weight:600;">${value}</td></tr>`;
 }
 
-export function renderNewBookingAdminEmail(ctx: BookingEmailContext): { subject: string; html: string; text: string } {
+export function renderNewBookingAdminEmail(
+  ctx: BookingEmailContext,
+  actions?: { confirmUrl: string; rejectUrl: string },
+): { subject: string; html: string; text: string } {
   const subject = `New booking · ${ctx.serviceName} · ${ctx.scheduledAtKl}`;
   const price = formatMYR(ctx.priceMyrCents);
+  const buttons = actions
+    ? `
+    <p style="margin-top:24px;">
+      <a href="${actions.confirmUrl}" style="display:inline-block;padding:10px 18px;background:#166534;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;margin-right:8px;">Confirm</a>
+      <a href="${actions.rejectUrl}" style="display:inline-block;padding:10px 18px;background:#991b1b;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">Reject</a>
+    </p>
+    <p style="color:#6b6b6b;font-size:12px;">Or open these URLs:<br/>Confirm: <a href="${actions.confirmUrl}" style="color:#166534;">${actions.confirmUrl}</a><br/>Reject: <a href="${actions.rejectUrl}" style="color:#991b1b;">${actions.rejectUrl}</a></p>`
+    : '';
   const html = `
   <div style="font-family:system-ui,sans-serif;max-width:560px;margin:auto;">
     <h2 style="color:#8a4a36;">New booking request</h2>
@@ -38,9 +49,10 @@ export function renderNewBookingAdminEmail(ctx: BookingEmailContext): { subject:
       ${row('Price', price)}
       ${ctx.customerNotes ? row('Notes', ctx.customerNotes.replace(/</g, '&lt;')) : ''}
     </table>
+    ${buttons}
     <p style="margin-top:16px;color:#6b6b6b;font-size:12px;">Booking ID: ${ctx.bookingId}</p>
   </div>`;
-  const text = [
+  const textParts = [
     `New booking request`,
     `Customer: ${ctx.customerName}`,
     `Phone: ${ctx.customerPhone}`,
@@ -52,8 +64,11 @@ export function renderNewBookingAdminEmail(ctx: BookingEmailContext): { subject:
     `Price: ${price}`,
     ctx.customerNotes ? `Notes: ${ctx.customerNotes}` : '',
     `Booking ID: ${ctx.bookingId}`,
-  ].filter(Boolean).join('\n');
-  return { subject, html, text };
+  ].filter(Boolean);
+  if (actions) {
+    textParts.push('', `Confirm: ${actions.confirmUrl}`, `Reject: ${actions.rejectUrl}`);
+  }
+  return { subject, html, text: textParts.join('\n') };
 }
 
 export function renderCustomerConfirmationEmail(ctx: BookingEmailContext): { subject: string; html: string; text: string } {
