@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderNewBookingAdminEmail, renderCustomerConfirmationEmail } from '@/modules/notifications';
 
 describe('email templates', () => {
@@ -42,6 +42,29 @@ describe('email templates', () => {
     expect(subject).toMatch(/已收到/);
     expect(html).toMatch(/Aisha/);
   });
+
+  it('escapes HTML in user-controlled fields (admin email)', () => {
+    const { html } = renderNewBookingAdminEmail({
+      ...baseCtx,
+      customerName: '<img src=x onerror=alert(1)>',
+      customerNotes: '<script>bad</script>',
+      locationSummary: 'Studio <b>HQ</b>',
+    });
+    expect(html).not.toContain('<img src=x');
+    expect(html).not.toContain('<script>');
+    expect(html).not.toContain('<b>HQ</b>');
+    expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+    expect(html).toContain('&lt;script&gt;bad&lt;/script&gt;');
+  });
+
+  it('escapes HTML in customerName greeting (customer email)', () => {
+    const { html } = renderCustomerConfirmationEmail({
+      ...baseCtx,
+      customerName: '<script>x</script>',
+    });
+    expect(html).not.toContain('<script>x</script>');
+    expect(html).toContain('&lt;script&gt;x&lt;/script&gt;');
+  });
 });
 
 vi.mock('@/server/email', () => ({ sendEmail: vi.fn(async () => ({ id: 'res_1' })) }));
@@ -49,6 +72,11 @@ vi.mock('@/server/email', () => ({ sendEmail: vi.fn(async () => ({ id: 'res_1' }
 import { sendBookingCreatedNotifications } from '@/modules/notifications';
 
 describe('sendBookingCreatedNotifications', () => {
+  beforeEach(async () => {
+    const { sendEmail } = await import('@/server/email');
+    (sendEmail as unknown as { mockClear: () => void }).mockClear();
+  });
+
   it('sends both admin and customer emails', async () => {
     const { sendEmail } = await import('@/server/email');
     const result = await sendBookingCreatedNotifications({
