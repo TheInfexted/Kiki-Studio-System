@@ -172,3 +172,31 @@ export function renderBookingRejectedEmail(
   textParts.push('', `${ctx.siteUrl}/book`);
   return { subject, html, text: textParts.join('\n') };
 }
+
+export function renderMagicLinkEmail(params: { url: string; email: string }): { subject: string; html: string; text: string } {
+  const subject = 'Sign in to Kiki Studio · 登录 Kiki Studio';
+  const html = `
+  <div style="font-family:system-ui,sans-serif;max-width:560px;margin:auto;">
+    <h2 style="color:#8a4a36;">Sign in to Kiki Studio</h2>
+    <p>Tap the button below to sign in. This link expires in 15 minutes.</p>
+    <p style="margin:24px 0;">
+      <a href="${params.url}" style="display:inline-block;padding:12px 24px;background:#8a4a36;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">Sign in</a>
+    </p>
+    <p style="color:#6b6b6b;font-size:13px;">If the button doesn't work, paste this URL into your browser:<br/><a href="${params.url}" style="color:#8a4a36;">${params.url}</a></p>
+    <hr style="margin:32px 0;border:none;border-top:1px solid #e5d8d0;"/>
+    <h3 style="color:#8a4a36;">登录 Kiki Studio</h3>
+    <p>点击上方按钮登录。此链接 15 分钟内有效。</p>
+    <p style="color:#6b6b6b;font-size:13px;">如果按钮无效,请将链接粘贴到浏览器中。</p>
+  </div>`;
+  const text = [
+    'Sign in to Kiki Studio',
+    '',
+    'Tap this link to sign in (expires in 15 minutes):',
+    params.url,
+    '',
+    '—',
+    '登录 Kiki Studio',
+    '点击以上链接登录 (15 分钟内有效)',
+  ].join('\n');
+  return { subject, html, text };
+}
