@@ -13,8 +13,14 @@ export default function SignInPage({ searchParams }: { searchParams: { sent?: st
     e.preventDefault();
     setSubmitting(true);
     try {
-      const body = new URLSearchParams({ email });
-      await fetch('/api/auth/signin/email', { method: 'POST', body });
+      const csrfRes = await fetch('/api/auth/csrf');
+      const { csrfToken } = await csrfRes.json();
+      const body = new URLSearchParams({ email, csrfToken, callbackUrl: '/admin' });
+      await fetch('/api/auth/signin/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+      });
       window.location.href = '/admin/signin?sent=1';
     } finally {
       setSubmitting(false);

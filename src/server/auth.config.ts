@@ -12,7 +12,7 @@ export function isAllowlisted(email: string | null | undefined): boolean {
 }
 
 export const authConfig: NextAuthConfig = {
-  session: { strategy: 'database' },
+  session: { strategy: 'jwt' },
   pages: {
     signIn: '/admin/signin',
     verifyRequest: '/admin/signin?sent=1',
@@ -22,6 +22,16 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     async signIn({ user }) {
       return isAllowlisted(user?.email);
+    },
+    async jwt({ token, user }) {
+      if (user?.id) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
     },
   },
 };
