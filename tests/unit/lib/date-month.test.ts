@@ -10,7 +10,7 @@ describe('startOfMonthInKL / endOfMonthInKL', () => {
     expect(start.toISOString()).toBe('2025-12-31T16:00:00.000Z');
   });
 
-  it('returns UTC instant for last millisecond of KL month', () => {
+  it('returns start-of-next-KL-month as exclusive upper bound', () => {
     const midJan = new Date('2026-01-15T04:00:00Z');
     const end = endOfMonthInKL(midJan);
     // 1 Feb 2026 00:00 KL == 31 Jan 2026 16:00 UTC (exclusive upper bound)
