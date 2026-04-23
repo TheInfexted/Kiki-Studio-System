@@ -29,7 +29,10 @@ test('signed-link confirm flow transitions booking status and emails customer', 
   const entries = await readdir(MAILBOX);
   const confirmedMail = entries.map(async (e) => JSON.parse(await readFile(join(MAILBOX, e), 'utf8')));
   const resolved = await Promise.all(confirmedMail);
-  const toCustomer = resolved.find((m) => m.to === 'e2e-customer-201@test.local');
+  const toCustomer = resolved.find((m) => {
+    const to = Array.isArray(m.to) ? m.to[0] : m.to;
+    return to === 'e2e-customer-201@test.local';
+  });
   expect(toCustomer).toBeTruthy();
   expect(toCustomer.subject).toMatch(/confirmed/i);
 
