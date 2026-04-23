@@ -9,18 +9,12 @@ datasource db {
 
 // --------- NextAuth adapter tables (wired in Phase 2) ---------
 
-enum UserRole {
-  owner
-  staff
-}
-
 model User {
   id                String     @id @default(cuid())
   email             String     @unique
   emailVerified     DateTime?
   name              String?
   image             String?
-  role              UserRole   @default(owner)
   accounts          Account[]
   sessions          Session[]
   confirmedBookings Booking[]  @relation("BookingConfirmedBy")
